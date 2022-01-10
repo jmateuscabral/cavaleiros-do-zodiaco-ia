@@ -45,3 +45,46 @@ class Mapa:
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
     ]
+
+    def busca_proximo_passo(self):
+
+        for linha in self.mapa:
+
+            for coluna in linha:
+
+                if self.mapa[self.mapa.index(linha)][linha.index(coluna)] == 0:
+                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = 6
+
+    def converte_mapa_objetos(self):
+
+        for linha in self.mapa:
+
+            for coluna in linha:
+
+                match self.mapa[self.mapa.index(linha)][linha.index(coluna)]:
+                    case 1:
+                        self.mapa[self.mapa.index(linha)][linha.index(coluna)] = No(self.mapa[self.mapa.index(linha)][linha.index(coluna)])
+
+        # print(f'Mapa: {self.mapa}')
+
+        print('Mapa convertido: ')
+        print(self.mapa)
+        for linha in self.mapa:
+            for coluna in linha:
+                print(coluna, end=' ')
+
+
+
+class No:
+
+    def __init__(self, indice):
+
+        self.visitado = False
+        self.indice = indice
+
+    def visitar(self):
+        self.visitado = True
+
+    def __str__(self):
+
+        return str(self.indice)
