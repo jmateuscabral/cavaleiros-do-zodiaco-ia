@@ -1,5 +1,10 @@
+from random import random
+
 
 class Mapa:
+
+    tipo_dados = 'numeros'
+    # tipo_dados = 'objetos'
 
     mapa = [
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -46,33 +51,104 @@ class Mapa:
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
     ]
 
+    def converte_em_objetos(self):
+
+        print('Convertendo em objetos ...\n')
+
+        if self.tipo_dados != 'objetos':
+            for linha in self.mapa:
+                for coluna in linha:
+                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = \
+                        No(self.mapa[self.mapa.index(linha)][linha.index(coluna)])
+            self.tipo_dados = 'objetos'
+        else:
+            print('Mapa já é de objetos ...\n')
+
+    def converte_em_numeros(self):
+
+        print('Convertendo em números ...\n')
+
+        if self.tipo_dados != 'numeros':
+            for linha in self.mapa:
+                for coluna in linha:
+                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = \
+                        self.mapa[self.mapa.index(linha)][linha.index(coluna)].indice
+            self.tipo_dados = 'numeros'
+        else:
+            print('Mapa já é de números ...\n')
+
+    def imprime(self, legenda='Mapa'):
+        print(f'\n{legenda}'
+              f'\nTipo de dados: {self.tipo_dados}')
+
+        for linha in self.mapa:
+            print(linha)
+            # for coluna in linha:
+            #     print(coluna, end=' ')
+            # print('')
+
     def busca_proximo_passo(self):
 
+        print('Buscando o próximo passo ...\n')
+
+        linha, coluna = self.posicao_a_esquerda()
+
+        if self.mapa[linha][coluna].indice != 6:
+            print('Não visitado ...')
+            self.mapa[linha][coluna].indice = 7
+        else:
+            print('Visitado')
+
+
+        #
+        #
+        # # self.converte_em_objetos()
+        # if self.mapa[linha][coluna - 1].indice != 6:
+        #     self.mapa[linha][coluna - 1].indice = 7
+        # else:
+        #     self.mapa[linha - 1][coluna].indice = 7
+        #     print(self.mapa[linha][coluna])
+        # self.mapa[linha][coluna].indice = 6
+        # else:
+        #     print('Já visitado ...\n')
+
+    def posicao_atual(self):
+
+        print('Buscando a posição atual ...\n')
+
         for linha in self.mapa:
-
             for coluna in linha:
+                if coluna.indice == 7 or coluna.indice == 0:
+                    l, c = self.mapa.index(linha), linha.index(coluna)
+                    return l, c
 
-                if self.mapa[self.mapa.index(linha)][linha.index(coluna)] == 0:
-                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = 6
+    def posicao_acima(self):
+        linha, coluna = self.posicao_atual()
+        if linha - 1 >= 0:
+            return linha - 1, coluna
+        else:
+            return linha, coluna
 
-    def converte_mapa_objetos(self):
+    def posicao_abaixo(self):
+        linha, coluna = self.posicao_atual()
+        if linha + 1 <= 42:
+            return linha + 1, coluna
+        else:
+            return linha, coluna
 
-        for linha in self.mapa:
+    def posicao_a_direita(self):
+        linha, coluna = self.posicao_atual()
+        if coluna + 1 <= 42:
+            return linha, coluna + 1
+        else:
+            return linha, coluna
 
-            for coluna in linha:
-
-                match self.mapa[self.mapa.index(linha)][linha.index(coluna)]:
-                    case 1:
-                        self.mapa[self.mapa.index(linha)][linha.index(coluna)] = No(self.mapa[self.mapa.index(linha)][linha.index(coluna)])
-
-        # print(f'Mapa: {self.mapa}')
-
-        print('Mapa convertido: ')
-        print(self.mapa)
-        for linha in self.mapa:
-            for coluna in linha:
-                print(coluna, end=' ')
-
+    def posicao_a_esquerda(self):
+        linha, coluna = self.posicao_atual()
+        if coluna - 1 >= 0:
+            return linha, coluna - 1
+        else:
+            return linha, coluna
 
 
 class No:
@@ -88,3 +164,4 @@ class No:
     def __str__(self):
 
         return str(self.indice)
+
