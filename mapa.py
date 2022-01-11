@@ -3,9 +3,6 @@ from random import random
 
 class Mapa:
 
-    tipo_dados = 'numeros'
-    # tipo_dados = 'objetos'
-
     mapa = [
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -51,70 +48,65 @@ class Mapa:
         [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
     ]
 
-    def converte_em_objetos(self):
-
-        print('Convertendo em objetos ...\n')
-
-        if self.tipo_dados != 'objetos':
-            for linha in self.mapa:
-                for coluna in linha:
-                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = \
-                        No(self.mapa[self.mapa.index(linha)][linha.index(coluna)])
-            self.tipo_dados = 'objetos'
-        else:
-            print('Mapa já é de objetos ...\n')
-
-    def converte_em_numeros(self):
-
-        print('Convertendo em números ...\n')
-
-        if self.tipo_dados != 'numeros':
-            for linha in self.mapa:
-                for coluna in linha:
-                    self.mapa[self.mapa.index(linha)][linha.index(coluna)] = \
-                        self.mapa[self.mapa.index(linha)][linha.index(coluna)].indice
-            self.tipo_dados = 'numeros'
-        else:
-            print('Mapa já é de números ...\n')
-
-    def imprime(self, legenda='Mapa'):
-        print(f'\n{legenda}'
-              f'\nTipo de dados: {self.tipo_dados}')
+    def __init__(self):
+        """
+        Converte a matriz numérica (default) para objetos
+        do tipo No de acordo com o indice
+        """
 
         for linha in self.mapa:
+            for coluna in linha:
+                self.mapa[self.mapa.index(linha)][linha.index(coluna)] = \
+                    No(self.mapa[self.mapa.index(linha)][linha.index(coluna)])
+
+    def get_matriz(self):
+        """
+        Retorna uma cópia numérica da matriz para ser plotada no gráfico
+        """
+
+        mapa = []
+
+        for linha in self.mapa:
+            nova_linha = []
+            for coluna in linha:
+                nova_linha.append(self.mapa[self.mapa.index(linha)][linha.index(coluna)].indice)
+            mapa.append(nova_linha)
+
+        return mapa
+
+    def imprime(self, legenda='Mapa'):
+        """
+        Imprime o mapa em matriz numérica
+        Parametro legenda é opcional
+        """
+
+        print(f'\n{legenda}')
+        for linha in self.get_matriz():
             print(linha)
-            # for coluna in linha:
-            #     print(coluna, end=' ')
-            # print('')
 
     def busca_proximo_passo(self):
+        """
+        Implementar a busca aqui
+        Atualmente só atualiza o gráfico testando
+        """
 
-        print('Buscando o próximo passo ...\n')
+        print('\nBuscando o próximo passo ...')
 
         linha, coluna = self.posicao_a_esquerda()
+        if coluna <= 5:
+            linha, coluna = self.posicao_acima()
 
         if self.mapa[linha][coluna].indice != 6:
-            print('Não visitado ...')
+            print(f'[{linha}][{coluna}] não visitado ...')
             self.mapa[linha][coluna].indice = 7
         else:
-            print('Visitado')
-
-
-        #
-        #
-        # # self.converte_em_objetos()
-        # if self.mapa[linha][coluna - 1].indice != 6:
-        #     self.mapa[linha][coluna - 1].indice = 7
-        # else:
-        #     self.mapa[linha - 1][coluna].indice = 7
-        #     print(self.mapa[linha][coluna])
-        # self.mapa[linha][coluna].indice = 6
-        # else:
-        #     print('Já visitado ...\n')
+            print(f'[{linha}][{coluna}] visitado ...')
 
     def posicao_atual(self):
-
-        print('Buscando a posição atual ...\n')
+        """
+        Retorna tupla com índice [linha][coluna]
+        da posição atual
+        """
 
         for linha in self.mapa:
             for coluna in linha:
@@ -123,6 +115,11 @@ class Mapa:
                     return l, c
 
     def posicao_acima(self):
+        """
+        Retorna tupla com índice [linha][coluna]
+        da posição da linha acima
+        """
+
         linha, coluna = self.posicao_atual()
         if linha - 1 >= 0:
             return linha - 1, coluna
@@ -130,6 +127,11 @@ class Mapa:
             return linha, coluna
 
     def posicao_abaixo(self):
+        """
+        Retorna tupla com índice [linha][coluna]
+        da posição da linha abaixo
+        """
+
         linha, coluna = self.posicao_atual()
         if linha + 1 <= 42:
             return linha + 1, coluna
@@ -137,6 +139,11 @@ class Mapa:
             return linha, coluna
 
     def posicao_a_direita(self):
+        """
+        Retorna tupla com índice [linha][coluna]
+        da posição da coluna à direita
+        """
+
         linha, coluna = self.posicao_atual()
         if coluna + 1 <= 42:
             return linha, coluna + 1
@@ -144,6 +151,11 @@ class Mapa:
             return linha, coluna
 
     def posicao_a_esquerda(self):
+        """
+        Retorna tupla com índice [linha][coluna]
+        da posição da coluna à esquerda
+        """
+
         linha, coluna = self.posicao_atual()
         if coluna - 1 >= 0:
             return linha, coluna - 1
@@ -154,7 +166,6 @@ class Mapa:
 class No:
 
     def __init__(self, indice):
-
         self.visitado = False
         self.indice = indice
 
@@ -162,6 +173,4 @@ class No:
         self.visitado = True
 
     def __str__(self):
-
         return str(self.indice)
-

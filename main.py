@@ -3,15 +3,16 @@ from mapa import Mapa
 from time import sleep
 
 TAXA_ATUALIZACAO = 0
+QUANT_ATUALIZACOES = 40
 
 mapa = Mapa()
-# mapa.imprime('Inicialização')
 
 plt.ion()
 
 figure, ax = plt.subplots()
 
-plt.imshow(Mapa.mapa)
+# print('Plotando mapa ...')
+# plt.imshow(mapa.get_matriz())
 
 i = 0
 
@@ -19,16 +20,15 @@ while True:
 
     i += 1
 
-    figure.canvas.draw()
+    # print('Plotando mapa ...')
+    plt.imshow(mapa.get_matriz())
+
+    # figure.canvas.draw()
     figure.canvas.flush_events()
 
-    mapa.converte_em_numeros()
-    plt.imshow(mapa.mapa)
-
-    mapa.converte_em_objetos()
     mapa.busca_proximo_passo()
 
     sleep(TAXA_ATUALIZACAO)
 
-    if i == 100:
+    if i == QUANT_ATUALIZACOES:
         break
